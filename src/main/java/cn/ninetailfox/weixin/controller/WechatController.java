@@ -1,10 +1,17 @@
 package cn.ninetailfox.weixin.controller;
 
+import cn.ninetailfox.weixin.entity.dto.BaseMessage;
+import cn.ninetailfox.weixin.entity.dto.TextMessage;
 import cn.ninetailfox.weixin.service.WechatValidationService;
 import cn.ninetailfox.weixin.util.HttpClientUtil;
+import cn.ninetailfox.weixin.util.MessageUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.dom4j.DocumentException;
+import org.dom4j.Text;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpRequest;
@@ -12,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sun.plugin2.message.Message;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -28,6 +36,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("wechat")
 public class WechatController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(WechatController.class);
 
     @Value("${wechat.token}")
     private String token;
@@ -54,14 +64,15 @@ public class WechatController {
     }
 
     @RequestMapping(value = "handle", method = RequestMethod.POST)
-    public void handleMsg(HttpServletRequest request) {
-        try (InputStream is = request.getInputStream()) {
-            while (is.available() > 0) {
-                System.out.print((char) is.read());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public String handleMsg(HttpServletRequest request) throws IOException, DocumentException {
+        Map<String, String> toMsg = MessageUtil.xmlToMap(request);
+        TextMessage textMessage = new TextMessage();
+        textMessage.setFromUserName(toMsg.get("ToUserName"));
+        textMessage.setToUserName(toMsg.get("FromUserName"));
+        textMessage.setCreateTime(System.currentTimeMillis());
+        textMessage.setMsgType("text");
+        textMessage.setContent("你发送的消息是：" + toMsg.get("Content"));
+        return MessageUtil.messageToXml(textMessage);
     }
 
     @RequestMapping("test")
