@@ -11,7 +11,12 @@ public class TextMessage extends BaseMessage {
     }
 
     public void setContent(String content) {
-        content = content;
+        this.content = content;
+    }
+
+    public TextMessage(String toUser, String fromUser, String content) {
+        super(toUser, fromUser, "text");
+        this.content = content;
     }
 
     @Override

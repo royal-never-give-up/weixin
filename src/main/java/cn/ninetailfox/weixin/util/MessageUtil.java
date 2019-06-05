@@ -66,6 +66,7 @@ public class MessageUtil {
                     LOGGER.info("不添加元素：" + key);
             }
         }
-        return null;
+        xmlBuilder.append("</xml>");
+        return xmlBuilder.toString();
     }
 }

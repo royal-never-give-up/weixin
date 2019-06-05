@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import sun.plugin2.message.Message;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -52,10 +53,10 @@ public class WechatController {
     private WechatValidationService wechatValidationService;
 
     @RequestMapping(value = "handle", method = RequestMethod.GET)
-    public String checkSignature(@RequestParam(required = true) String signature,
-                                 @RequestParam(required = true) String timestamp,
-                                 @RequestParam(required = true) String nonce,
-                                 @RequestParam(required = true) String echostr) {
+    public String checkSignature(@RequestParam() String signature,
+                                 @RequestParam() String timestamp,
+                                 @RequestParam() String nonce,
+                                 @RequestParam() String echostr) {
         if (wechatValidationService.checkSignature(signature, timestamp, nonce, token)) {
             return echostr;
         } else {
@@ -64,15 +65,15 @@ public class WechatController {
     }
 
     @RequestMapping(value = "handle", method = RequestMethod.POST)
-    public String handleMsg(HttpServletRequest request) throws IOException, DocumentException {
+    public void handleMsg(HttpServletRequest request, HttpServletResponse response) throws IOException, DocumentException {
         Map<String, String> toMsg = MessageUtil.xmlToMap(request);
-        TextMessage textMessage = new TextMessage();
-        textMessage.setFromUserName(toMsg.get("ToUserName"));
-        textMessage.setToUserName(toMsg.get("FromUserName"));
-        textMessage.setCreateTime(System.currentTimeMillis());
-        textMessage.setMsgType("text");
-        textMessage.setContent("你发送的消息是：" + toMsg.get("Content"));
-        return MessageUtil.messageToXml(textMessage);
+        TextMessage textMessage = new TextMessage(
+                toMsg.get("FromUserName"),
+                toMsg.get("ToUserName"),
+                "你发送的消息是：" + toMsg.get("Content"));
+        String msgStr = MessageUtil.messageToXml(textMessage);
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().print(msgStr);
     }
 
     @RequestMapping("test")

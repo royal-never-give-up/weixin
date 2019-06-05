@@ -35,16 +35,8 @@ public abstract class BaseMessage {
         return createTime;
     }
 
-    public void setCreateTime(Long createTime) {
-        this.createTime = createTime;
-    }
-
     public String getMsgType() {
         return msgType;
-    }
-
-    public void setMsgType(String msgType) {
-        this.msgType = msgType;
     }
 
     public Long getMsgId() {
@@ -71,4 +63,10 @@ public abstract class BaseMessage {
         return baseMap;
     }
 
+    public BaseMessage(String toUserName, String fromUserName, String msgType) {
+        this.toUserName = toUserName;
+        this.fromUserName = fromUserName;
+        this.msgType = msgType;
+        this.createTime = System.currentTimeMillis();
+    }
 }
