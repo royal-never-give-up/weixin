@@ -2,12 +2,14 @@ package cn.ninetailfox.weixin.controller;
 
 import cn.ninetailfox.weixin.entity.User;
 import cn.ninetailfox.weixin.mapper.UserMapper;
+import cn.ninetailfox.weixin.service.IBusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -20,6 +22,9 @@ public class IndexController {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private IBusService busService;
 
     @RequestMapping("hello")
     public String hello() {
@@ -35,5 +40,10 @@ public class IndexController {
         userMapper.insertUser(user);
 
         return userMapper.findAllUsers();
+    }
+
+    @RequestMapping("bus")
+    public Map<String, Object> bus() {
+        return busService.lineDetail();
     }
 }

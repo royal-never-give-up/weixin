@@ -1,0 +1,53 @@
+ul {
+    padding-top: 20px;
+}
+li:not(:last-child) {
+    position: relative;
+    width: 40px;
+    float: left;
+    list-style: none;
+    border-top: 2px #07C160 solid;
+}
+li:last-child {
+    position: relative;
+    width: 40px;
+    float: left;
+    list-style: none;
+    border-top: 2px #00000000 solid;
+}
+li div {
+    position: relative;
+    margin-left: -10px;
+    margin-top: 5px;
+    width: 20px;
+    font-size: 20px;
+    word-wrap: break-word;
+    text-align: center;
+}
+li div::before {
+    position: absolute;
+    top: -10px;
+    left: 6px;
+    content: "";
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background: #07C160;
+}
+li i.stop {
+    position: absolute;
+    background: url("image/bus_stop.png") center bottom no-repeat;
+    width: 20px;
+    height: 20px;
+    top: -30px;
+    left: -10px;
+}
+li i.run {
+    position: absolute;
+    background: url("image/bus_run.png") center bottom no-repeat;
+    width: 20px;
+    height: 20px;
+    top: -30px;
+    left: -30px;
+}
