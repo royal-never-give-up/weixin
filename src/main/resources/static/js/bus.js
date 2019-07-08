@@ -1,6 +1,6 @@
 $(function () {
     $.ajax({
-        url: "/bus/bus",
+        url: "/bus/ajaxLineDetail",
         type: "get",
         dataType: "json",
         success: function (response) {

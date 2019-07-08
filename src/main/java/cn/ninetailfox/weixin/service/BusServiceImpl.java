@@ -1,20 +1,22 @@
 package cn.ninetailfox.weixin.service;
 
-import cn.ninetailfox.weixin.util.HttpClientUtil;
+import cn.ninetailfox.weixin.feign.IBusFeign;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class BusServiceImpl implements IBusService {
 
+    @Autowired
+    IBusFeign busFeign;
+
     @Override
-    public Map<String, Object> lineDetail() {
-        Map<String, Object> getResult =  HttpClientUtil.get(
-                "http://bus.wuhancloud.cn:9087/website//web/420100/line/027-715-1.do?Type=LineDetail",
-                new HashMap<>());
-        return JSON.parseObject(getResult.get("entity").toString());
+    public JSONObject lineDetail() {
+        JSONObject lineInfo = JSON.parseObject(busFeign.lineDetail("420100", "715", "1"));
+        return lineInfo;
     }
 }

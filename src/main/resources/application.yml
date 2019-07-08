@@ -1,10 +1,19 @@
+server:
+    port: 8080
+
 spring:
     datasource:
-        url:
+        url: jdbc:mysql://localhost:3306/ssmdemo?useSSL=false
         username: root
-        password: root
+        password: 123456
         driver-class-name: com.mysql.jdbc.Driver
     profiles:
         include: wechat
+
 mybatis:
-    type-aliases-package: cn.ninetailfox.weixin.pojo
+    type-aliases-package: cn.ninetailfox.weixin.entity
+    mapper-locations: classpath:mapper/*Mapper.xml
+
+logging:
+    level:
+        cn.ninetailfox.weixin.feign.IBusFeign: debug
